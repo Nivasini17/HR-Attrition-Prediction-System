@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HR Attrition Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7f9;
+            display: flex;
+            justify-content: center;
+            padding: 40px;
+        }
+        .container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        form p {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+        }
+        input[type="submit"] {
+            margin-top: 15px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 18px;
+        }
+        ul {
+            margin-top: 10px;
+            background: #f0f0f0;
+            padding: 10px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Employee Attrition Prediction</h2>
+        <form action="/predict" method="post">
+            <select name="Department">
+                <option value="0" {% if entered_data and entered_data['Department'] == '0' %}selected{% endif %}>HR</option>
+                <option value="1" {% if entered_data and entered_data['Department'] == '1' %}selected{% endif %}>Sales</option>
+                <option value="2" {% if entered_data and entered_data['Department'] == '2' %}selected{% endif %}>IT</option>
+            </select>
+            
+            <p>
+                <label>Salary</label>
+                <select name="salary">
+                    <option value="0">Low</option>
+                    <option value="1">Medium</option>
+                    <option value="2">High</option>
+                </select>
+            </p>
+            <p>
+                <label>Years at Company</label>
+                <input type="number" step="1" name="time_spend_company" required value="{{ entered_data['time_spend_company'] if entered_data }}">
+            </p>
+            <p>
+                <label>Job Satisfaction Score</label>
+                <input type="number" step="0.1" name="Emp_Satisfaction" required value="{{ entered_data['Emp_Satisfaction'] if entered_data }}">
+            </p>
+            <p>
+                <label>Last Evaluation Score</label>
+                <input type="number" step="0.1" name="last_evaluation" required value="{{ entered_data['last_evaluation'] if entered_data }}">
+            </p>
+            
+            <input type="submit" value="Predict">
+        </form>
+
+        {% if prediction_text %}
+            <div class="result">{{ prediction_text }}</div>
+        {% endif %}
+
+        {% if entered_data %}
+            <ul>
+                <li><strong>Department:</strong> {{ entered_data['Department'] }}</li>
+                <li><strong>Salary:</strong> {{ entered_data['salary'] }}</li>
+                <li><strong>Years at Company:</strong> {{ entered_data['time_spend_company'] }}</li>
+                <li><strong>Job Satisfaction:</strong> {{ entered_data['Emp_Satisfaction'] }}</li>
+                <li><strong>Last Evaluation:</strong> {{ entered_data['last_evaluation'] }}</li>
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
